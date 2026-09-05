@@ -1,161 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>CarGrow — Move Cargo. Grow Trust.</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/forms.css" />
-  </head>
-  <body>
-    <div id="toast" class="toast"></div>
-    <dialog id="confirmDialog" class="confirm-dialog">
-      <div class="dialog-icon">!</div>
-      <p class="eyebrow">REVIEW TRANSACTION</p>
-      <h3 id="confirmTitle">Confirm action</h3>
-      <div id="confirmBody" class="confirm-body"></div>
-      <p class="dialog-note">
-        MetaMask will ask you to approve this blockchain transaction.
-      </p>
-      <div class="dialog-actions">
-        <button id="dialogEdit" class="ghost">Edit / Go back</button
-        ><button id="dialogConfirm" class="primary">Confirm</button>
-      </div>
-    </dialog>
-    <dialog id="filterDialog" class="confirm-dialog">
-      <p class="eyebrow">AGREEMENT VIEW</p>
-      <h3>Sort and filter agreements</h3>
-      <div class="field">
-        <label for="sortBy">Sort by</label
-        ><select id="sortBy">
-          <option value="deadline">Deadline date</option>
-          <option value="value">ETH amount</option>
-          <option value="status">Status</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="sortDirection">Order</label
-        ><select id="sortDirection">
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="statusFilter">Status filter</label
-        ><select id="statusFilter">
-          <option value="all">All statuses</option>
-          <option value="Open">Open</option>
-          <option value="Pending funding">Pending funding</option>
-          <option value="Funded">Funded</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-          <option value="Refunded">Refunded</option>
-          <option value="Expired — refund pending">
-            Expired — refund pending
-          </option>
-        </select>
-      </div>
-      <div class="dialog-actions">
-        <button id="filterCancel" class="ghost">Cancel</button
-        ><button id="filterApply" class="primary">Apply</button>
-      </div>
-    </dialog>
-    <dialog id="infoDialog" class="confirm-dialog">
-      <p class="eyebrow">BLOCKCHAIN RECORD</p>
-      <h3 id="infoTitle">Transaction details</h3>
-      <div id="infoBody" class="confirm-body"></div>
-      <div class="dialog-actions">
-        <button id="infoClose" class="primary">Close</button>
-      </div>
-    </dialog>
-    <dialog id="historyFilterDialog" class="confirm-dialog">
-      <p class="eyebrow">TRANSACTION VIEW</p>
-      <h3>Filter transaction history</h3>
-      <div class="field">
-        <label for="historyScope">Transaction scope</label
-        ><select id="historyScope">
-          <option value="mine">Current account only</option>
-          <option value="all">All blockchain transactions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="historyDirection">Date order</label
-        ><select id="historyDirection">
-          <option value="desc">Newest first</option>
-          <option value="asc">Oldest first</option>
-        </select>
-      </div>
-      <div class="dialog-actions">
-        <button id="historyFilterCancel" class="ghost">Cancel</button
-        ><button id="historyFilterApply" class="primary">Apply</button>
-      </div>
-    </dialog>
-    <section id="landing" class="landing">
-      <nav class="landing-nav">
-        <a class="brand"><span class="brand-mark cg-mark">CG</span>CarGrow</a>
-      </nav>
-      <main class="hero cargrow-hero">
-        <div class="eyebrow">DECENTRALIZED LOGISTICS ESCROW</div>
-        <h1>Move Cargo.<br /><em>Grow Trust.</em></h1>
-        <button id="connectBtn" class="primary big">
-          Connect Wallet <span>→</span>
-        </button>
-        <p>Connect your wallet to continue.</p>
-      </main>
-    </section>
-
-    <section id="roleScreen" class="center-screen hidden">
-      <div class="role-card">
-        <div class="brand">
-          <span class="brand-mark cg-mark">CG</span>CarGrow
-        </div>
-        <p class="eyebrow">ONE-TIME REGISTRATION</p>
-        <h2>How will you use CarGrow?</h2>
-        <p>Your role is permanently linked to this wallet.</p>
-        <div class="role-grid">
-          <button class="role-option" data-role="1">
-            <b>Shipper</b
-            ><span
-              >Create, fund, and monitor logistics agreements.</span
-            ></button
-          ><button class="role-option" data-role="2">
-            <b>Carrier</b
-            ><span>Accept contracts, complete milestones, get paid.</span>
-          </button>
-        </div>
-        <button id="registerBtn" class="primary" disabled>Confirm role</button>
-      </div>
-    </section>
-
-    <div id="app" class="app hidden">
-      <aside>
-        <a class="brand"><span class="brand-mark cg-mark">CG</span>CarGrow</a>
-        <div class="role-label" id="roleLabel">SHIPPER PORTAL</div>
-        <nav id="sidebar"></nav>
-        <div class="wallet-card">
-          <span>CONNECTED WALLET</span><b id="walletShort">—</b
-          ><small><i></i> Ganache network</small
-          ><button id="disconnectBtn">Disconnect</button>
-        </div>
-      </aside>
-      <main class="content">
-        <header>
-          <div>
-            <p id="pageKicker">OVERVIEW</p>
-            <h2 id="pageTitle">Dashboard</h2>
-          </div>
-          <button id="refreshBtn" class="icon-btn">↻</button>
-        </header>
-        <div id="view"></div>
-      </main>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CarGrow — Move Cargo. Grow Trust.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <dialog id="confirmDialog" class="confirm-dialog">
+    <div class="dialog-icon">!</div>
+    <p class="eyebrow">REVIEW TRANSACTION</p>
+    <h3 id="confirmTitle">Confirm action</h3>
+    <div id="confirmBody" class="confirm-body"></div>
+    <p class="dialog-note">MetaMask will ask you to approve this blockchain transaction.</p>
+    <div class="dialog-actions"><button id="dialogEdit" class="ghost">Edit / Go back</button><button id="dialogConfirm"
+        class="primary">Confirm</button></div>
+  </dialog>
+  <dialog id="filterDialog" class="confirm-dialog">
+    <p class="eyebrow">AGREEMENT VIEW</p>
+    <h3>Sort and filter agreements</h3>
+    <div class="field"><label for="sortBy">Sort by</label><select id="sortBy">
+        <option value="deadline">Deadline date</option>
+        <option value="value">ETH amount</option>
+        <option value="status">Status</option>
+      </select></div>
+    <div class="field"><label for="sortDirection">Order</label><select id="sortDirection">
+        <option value="desc">Descending</option>
+        <option value="asc">Ascending</option>
+      </select></div>
+    <div class="field"><label for="statusFilter">Status filter</label><select id="statusFilter">
+        <option value="all">All statuses</option>
+        <option value="Open">Open</option>
+        <option value="Pending funding">Pending funding</option>
+        <option value="Funded">Funded</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Refunded">Refunded</option>
+        <option value="Expired — refund pending">Expired — refund pending</option>
+      </select></div>
+    <div class="dialog-actions"><button id="filterCancel" class="ghost">Cancel</button><button id="filterApply"
+        class="primary">Apply</button></div>
+  </dialog>
+  <dialog id="infoDialog" class="confirm-dialog">
+    <p class="eyebrow">BLOCKCHAIN RECORD</p>
+    <h3 id="infoTitle">Transaction details</h3>
+    <div id="infoBody" class="confirm-body"></div>
+    <div class="dialog-actions"><button id="infoClose" class="primary">Close</button></div>
+  </dialog>
+  <dialog id="historyFilterDialog" class="confirm-dialog">
+    <p class="eyebrow">TRANSACTION VIEW</p>
+    <h3>Filter transaction history</h3>
+    <div class="field"><label for="historyScope">Transaction scope</label><select id="historyScope">
+        <option value="mine">Current account only</option>
+        <option value="all">All blockchain transactions</option>
+      </select></div>
+    <div class="field"><label for="historyDirection">Date order</label><select id="historyDirection">
+        <option value="desc">Newest first</option>
+        <option value="asc">Oldest first</option>
+      </select></div>
+    <div class="dialog-actions"><button id="historyFilterCancel" class="ghost">Cancel</button><button
+        id="historyFilterApply" class="primary">Apply</button></div>
+  </dialog>
+  <section id="landing" class="landing">
+    <nav class="landing-nav"><a class="brand"><span class="brand-mark cg-mark">CG</span>CarGrow</a></nav>
+    <main class="hero cargrow-hero">
+      <div class="eyebrow">DECENTRALIZED LOGISTICS ESCROW</div>
+      <h1>Move Cargo.<br><em>Grow Trust.</em></h1><button id="connectBtn" class="primary big">Connect Wallet
+        <span>→</span></button>
+      <p>Connect your wallet to continue.</p>
+    </main>
+  </section>
+  
+  <section id="roleScreen" class="center-screen hidden">
+    <div class="role-card">
+      <div class="brand"><span class="brand-mark cg-mark">CG</span>CarGrow</div>
+      <p class="eyebrow">ONE-TIME REGISTRATION</p>
+      <h2>How will you use CarGrow?</h2>
+      <p>Your role is permanently linked to this wallet.</p>
+      <div class="role-grid"><button class="role-option" data-role="1"><b>Shipper</b><span>Create, fund, and monitor
+            logistics agreements.</span></button><button class="role-option" data-role="2"><b>Carrier</b><span>Accept
+            contracts, complete milestones, get paid.</span></button></div><button id="registerBtn" class="primary"
+        disabled>Confirm role</button>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
-    <script src="js/app.js"></script>
+  </section>
+  
+  <div id="app" class="app hidden">
+    <aside><a class="brand"><span class="brand-mark cg-mark">CG</span>CarGrow</a>
+      <div class="role-label" id="roleLabel">SHIPPER PORTAL</div>
+      <nav id="sidebar"></nav>
+      <div class="wallet-card"><span>CONNECTED WALLET</span><b id="walletShort">—</b><small><i></i> Ganache
+          network</small><button id="disconnectBtn">Disconnect</button></div>
+    </aside>
+    <main class="content">
+      <header>
+        <div>
+          <p id="pageKicker">OVERVIEW</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div><button id="refreshBtn" class="icon-btn">↻</button>
+      </header>
+      <div id="view"></div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+  <script src="js/app.js"></script>
   </body>
-</html>
+  
+  </html>

@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test",
     "deploy:ganache": "hardhat run scripts/deploy.js --network ganache",
     "serve": "http-server . -p 5500 -c-1"
   },

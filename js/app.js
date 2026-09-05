@@ -1,9 +1,6 @@
-// ============================================================================
-// 1. CONTRACT CONFIGURATION AND ABI
-// Replace this address after each Ganache redeployment. The ABI defines the
-// Solidity functions and events that Ethers.js can call and decode.
-// ============================================================================
-const CONTRACT_ADDRESS = "insert the contract address";
+// CONTRACT CONFIGURATION AND ABI
+// Replace this address after each Ganache redeployment.
+const CONTRACT_ADDRESS = "0x4F0EFFf9c42b3217Bd1eb909D2468Df041407b5c";
 const ABI = [
   "function agreementCount() view returns (uint256)",
   "function users(address) view returns (uint8 role,bool registered)",
@@ -29,11 +26,8 @@ const ABI = [
   "event RefundClaimed(uint256 indexed agreementId,uint256 amount)",
 ];
 
-// ============================================================================
-// 2. FRONTEND STATE, FORMATTING, AND SAFE UI HELPERS
-// Browser state stores the wallet, role, current view, filters, and decoded
-// data. Authoritative agreement and financial state always remains on-chain.
-// ============================================================================
+// FRONTEND STATE AND FORMATTING
+// Browser state stores the wallet, role, current view, filters, and decoded data
 const $ = (s) => document.querySelector(s);
 const state = {
   provider: null,
@@ -133,11 +127,7 @@ function confirmReview(title, rows, confirmLabel = "Confirm") {
   });
 }
 
-// ============================================================================
-// 3. METAMASK CONNECTION, NETWORK CHECK, AND ROLE REGISTRATION
-// BrowserProvider wraps MetaMask. Contract bytecode is checked before reads so
-// a wrong network/address produces a useful error instead of an ABI failure.
-// ============================================================================
+// METAMASK CONNECTION, NETWORK CHECK AND ROLE REGISTRATION
 async function verifyContractConnection() {
   const network = await state.provider.getNetwork();
   const code = await state.provider.getCode(CONTRACT_ADDRESS);
@@ -235,11 +225,8 @@ async function enterApp() {
     details(savedId);
   else navigate(items.some(([id]) => id === saved) ? saved : "dashboard");
 }
-// ============================================================================
-// 4. BLOCKCHAIN DATA LOADING
-// Free read-only calls load agreements, milestones, and reputation. The browser
-// then selects records related to the connected Shipper or Carrier.
-// ============================================================================
+// BLOCKCHAIN DATA LOADING
+// Read-only calls load agreements, milestones and reputation.
 async function loadAgreements() {
   const [countRaw, reputation] = await Promise.all([
     state.contract.agreementCount(),
@@ -253,11 +240,8 @@ async function loadAgreements() {
     ([agreement, milestones]) => ({ a: agreement, m: milestones }),
   );
 }
-// ============================================================================
-// 5. NAVIGATION, STATUS MAPPING, AGREEMENT LISTS, AND FILTERS
-// The active page is remembered per wallet. Sorting/filtering changes only the
-// presentation; it never changes or deletes blockchain agreements.
-// ============================================================================
+// NAVIGATION, STATUS MAPPING, AGREEMENT LISTS AND FILTERS
+// The active page is remembered per wallet.
 function mine(x) {
   return state.role === 1
     ? x.a.shipper.toLowerCase() === state.account.toLowerCase()
@@ -360,7 +344,10 @@ function listAgreements(items, kicker, title) {
     items.length
   } agreement${
     items.length === 1 ? "" : "s"
-  }</h3><button class="ghost filter-only" onclick="openAgreementFilter()" aria-label="Filter and sort agreements" title="Filter and sort agreements"><span class="filter-icon" aria-hidden="true"></span></button></div><div class="list-columns"><span>Agreement</span><span>Cargo / Route</span><span>ETH amount</span><span>Status</span><span>Action</span></div><div class="agreement-list">${
+  }</h3><button class="ghost filter-only" onclick="openAgreementFilter()" aria-label="Filter and sort agreements" title="Filter and sort agreements">
+  <span class="filter-icon" aria-hidden="true"></span></button></div>
+  <div class="list-columns"><span>Agreement</span><span>Cargo / Route</span><span>ETH amount</span><span>Status</span>
+  <span>Action</span></div><div class="agreement-list">${
     visible.length
       ? visible.map(row).join("")
       : '<div class="card empty">No agreements match the selected filter. Completed agreements remain available when “All statuses” or “Completed” is selected.</div>'
@@ -386,10 +373,8 @@ $("#filterApply").onclick = () => {
     listAgreements(items, kicker, title);
   }
 };
-// ============================================================================
-// 6. ROLE-AWARE DASHBOARD
+// ROLE DASHBOARD
 // Shippers see escrow/release totals; Carriers see earnings and reputation.
-// ============================================================================
 function dashboard() {
   headings(
     "OVERVIEW",
@@ -430,18 +415,19 @@ function dashboard() {
       : '<div class="card empty">Your on-chain agreements will appear here.</div>'
   }</div>`;
 }
-// ============================================================================
+
 // 7. AGREEMENT CREATION AND INPUT VALIDATION
-// Builds the form, validates contextual rules, reviews values, then submits the
-// transaction. `prefill` copies a cancelled agreement for safe recreation.
-// ============================================================================
+// Builds the form, validates contextual rules, reviews values, then submits the transaction.
 function createView(prefill = null) {
   headings("NEW CONTRACT", "Create Agreement");
   const minimum = new Date(Date.now() + 5 * 60 * 1000);
   minimum.setMinutes(minimum.getMinutes() - minimum.getTimezoneOffset());
   $(
     "#view",
-  ).innerHTML = `<form id="createForm" class="card form-card" novalidate><p class="form-intro">Enter the shipment terms carefully. You will review every value before MetaMask requests approval.</p><div class="form-grid"><div class="field full"><label for="cargo">Cargo description</label><textarea id="cargo" name="cargo" minlength="5" maxlength="200" required placeholder="e.g. Temperature-controlled medical supplies"></textarea><small>5–200 characters.</small><span class="field-error" data-error-for="cargo"></span></div><div class="field"><label for="origin">Origin</label><input id="origin" name="origin" minlength="2" maxlength="80" required placeholder="Pickup city or facility e.g. Johor Bahru"><span class="field-error" data-error-for="origin"></span></div><div class="field"><label for="destination">Destination</label><input id="destination" name="destination" minlength="2" maxlength="80" required placeholder="Dropoff city or facility e.g. Kuala Lumpur"><span class="field-error" data-error-for="destination"></span></div><div class="field"><label for="value">Contract value (ETH)</label><input id="value" name="value" type="number" min="0.0001" max="100000" step="0.0001" required placeholder="1.0000"><small>The exact amount the shipper will later fund.</small><span class="field-error" data-error-for="value"></span></div><div class="field"><label for="deadline">Strict delivery deadline</label><input id="deadline" name="deadline" type="datetime-local" min="${minimum
+  ).innerHTML = `<form id="createForm" class="card form-card" novalidate>
+  <p class="form-intro">Enter the shipment terms carefully. You will review every value before MetaMask requests approval.</p><div class="form-grid"><div class="field full"><label for="cargo">Cargo description</label><textarea id="cargo" name="cargo" minlength="5" maxlength="200" required placeholder="e.g. Temperature-controlled medical supplies"></textarea><small>5–200 characters.</small><span class="field-error" data-error-for="cargo"></span></div>
+  <div class="field"><label for="origin">Origin</label><input id="origin" name="origin" minlength="2" maxlength="80" required placeholder="Pickup city or facility e.g. Johor Bahru"><span class="field-error" data-error-for="origin"></span></div><div class="field"><label for="destination">Destination</label><input id="destination" name="destination" minlength="2" maxlength="80" required placeholder="Dropoff city or facility e.g. Kuala Lumpur">
+  <span class="field-error" data-error-for="destination"></span></div><div class="field"><label for="value">Contract value (ETH)</label><input id="value" name="value" type="number" min="0.0001" max="100000" step="0.0001" required placeholder="1.0000"><small>The exact amount the shipper will later fund.</small><span class="field-error" data-error-for="value"></span></div><div class="field"><label for="deadline">Strict delivery deadline</label><input id="deadline" name="deadline" type="datetime-local" min="${minimum
     .toISOString()
     .slice(
       0,
@@ -549,11 +535,7 @@ async function createAgreement(e) {
     toast(parseError(err), true);
   }
 }
-// ============================================================================
-// 8. AGREEMENT DETAILS AND ROLE/STATUS ACTIONS
-// One renderer handles every status and reveals only actions allowed for the
-// current wallet, including funding, evidence, confirmation, and settlement.
-// ============================================================================
+// AGREEMENT DETAILS AND ROLE/STATUS ACTIONS
 window.details = function (id) {
   try {
     const x = state.agreements.find((item) => Number(item.a.id) === Number(id));
@@ -586,7 +568,8 @@ window.details = function (id) {
       next &&
       !Boolean(next.evidenceSubmitted ?? next[2])
     )
-      action = `<div class="action-panel"><p>Submit a tracking number, document URL, IPFS reference, or delivery-proof identifier. Its hash is stored on-chain for tamper detection.</p><div class="field"><label for="evidenceRef">Milestone evidence reference</label><input id="evidenceRef" minlength="3" maxlength="200" placeholder="e.g. IPFS CID, tracking ID, or evidence URL"><small>The shipper must review and confirm this before payment.</small></div><button class="primary" style="margin-top:12px" onclick="submitEvidence(${id})">Review evidence submission</button></div>`;
+      action = `<div class="action-panel"><p>Submit a tracking number, document URL, IPFS reference, or delivery-proof identifier. Its hash is stored on-chain for tamper detection.</p><div class="field"><label for="evidenceRef">Milestone evidence reference</label><input id="evidenceRef" minlength="3" maxlength="200" placeholder="e.g. IPFS CID, tracking ID, or evidence URL"><small>The shipper must review and confirm this before payment.</small></div>
+      <button class="primary" style="margin-top:12px" onclick="submitEvidence(${id})">Review evidence submission</button></div>`;
     if (
       state.role === 2 &&
       status === 2 &&
@@ -689,7 +672,7 @@ window.recreateAgreement = function (id) {
   );
 };
 // Carrier evidence is stored first. Shipper confirmation releases the payout;
-// final confirmation also awards the Carrier's reputation points.
+// Final confirmation  awards the Carrier reputation points.
 window.submitEvidence = async function (id) {
   const input = $("#evidenceRef"),
     reference = input.value.trim();
@@ -763,11 +746,8 @@ window.act = async function (type, id, value) {
     toast(parseError(e), true);
   }
 };
-// ============================================================================
-// 9. TRANSACTION HISTORY FROM CONTRACT EVENTS
-// Events form the audit trail. Users can view current-wallet events or every
-// event emitted by this deployed CarGrow contract, ordered by block time.
-// ============================================================================
+// TRANSACTION HISTORY FROM CONTRACT EVENTS
+// Events form the audit trail. Users can view current-wallet events or every event emitted by this deployed CarGrow contract
 async function historyView() {
   headings("ON-CHAIN ACTIVITY", "Transaction History");
   try {
@@ -883,10 +863,9 @@ window.showHistoryEvent = function (index) {
   $("#infoDialog").showModal();
 };
 $("#infoClose").onclick = () => $("#infoDialog").close();
-// ============================================================================
-// 10. REFRESH AND APPLICATION EVENT BINDINGS
+
+// REFRESH AND APPLICATION EVENT BINDINGS
 // Refresh reloads blockchain data while preserving the current page/detail.
-// ============================================================================
 async function refresh() {
   await loadAgreements();
 }
